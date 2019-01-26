@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!--status : 这个用于设置log4j2自身内部的信息输出,可以不设置,当设置成trace时,会看到log4j2内部各种详细输出 monitorInterval -->
+<!--: Log4j能够自动检测修改配置文件和重新配置本身, 设置间隔秒数。 注：本配置文件的目标是将不同级别的日志输出到不同文件，最大2MB一个文件， -->
+<!--文件数据达到最大值时，旧数据会被压缩并放进指定文件夹 -->
+<Configuration status="INFO" monitorInterval="600">
+
+    <Properties> <!-- 配置日志文件输出目录，此配置将日志输出到tomcat根目录下的指定文件夹 -->
+        <Property name="LOG_HOME">log</Property>
+    </Properties>
+
+    <Appenders>
+        <!--这个输出控制台的配置，这里输出除了warn和error级别的信息到System.out -->
+        <Console name="console_out_appender" target="SYSTEM_OUT">
+            <!-- 控制台只输出level及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) . -->
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT"
+                             onMismatch="DENY"/>
+            <!-- 输出日志的格式 -->
+            <PatternLayout pattern="%5p [%t] %d{yyyy-MM-dd HH:mm:ss.SSS} (%F:%L) %m%n"/>
+        </Console>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- 配置日志的根节点 -->
+        <!-- 定义logger，只有定义了logger并引入了appender，appender才会生效 -->
+        <root level="trace">
+            <appender-ref ref="console_out_appender"/>
+        </root>
+    </Loggers>
+
+</Configuration>
